@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "497020164405",
+    "project_id": "gymlevelup-e11ff",
+    "storage_bucket": "gymlevelup-e11ff.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:497020164405:android:66e9dd845561e6ea0ed47c",
+        "android_client_info": {
+          "package_name": "com.example.gymlevelup"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAeAI5trCmGRlF3hZIhelEgkutLM2MTwxE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:497020164405:android:a41269a7fd7028c80ed47c",
+        "android_client_info": {
+          "package_name": "com.gymlevelup.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAeAI5trCmGRlF3hZIhelEgkutLM2MTwxE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
