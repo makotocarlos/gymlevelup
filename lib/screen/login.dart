@@ -90,28 +90,74 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Iniciar Sesión")),
+      appBar: AppBar(
+        title: Text("Iniciar Sesión"),
+        backgroundColor: Colors.black87,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(
+              "Bienvenido de nuevo",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(height: 24),
             TextField(
               controller: emailController,
-              decoration: InputDecoration(labelText: "Correo"),
-            ),
-            TextField(
-              controller: passwordController,
-              decoration: InputDecoration(labelText: "Contraseña"),
-              obscureText: true,
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                labelText: "Correo",
+                labelStyle: TextStyle(color: Colors.grey),
+                filled: true,
+                fillColor: Colors.black45,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                ),
+              ),
             ),
             SizedBox(height: 16),
+            TextField(
+              controller: passwordController,
+              obscureText: true,
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                labelText: "Contraseña",
+                labelStyle: TextStyle(color: Colors.grey),
+                filled: true,
+                fillColor: Colors.black45,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+            SizedBox(height: 32),
             _isLoading
-                ? CircularProgressIndicator() // Indicador de carga
+                ? CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(Colors.blueAccent),
+                  )
                 : ElevatedButton(
                     onPressed: () => loginUser(context),
-                    child: Text("Iniciar Sesión"),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 14, horizontal: 32),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      backgroundColor: Colors.blueAccent, // Color personalizado
+                    ),
+                    child: Text(
+                      "Iniciar Sesión",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
                   ),
+            SizedBox(height: 16),
             TextButton(
               onPressed: () {
                 Navigator.push(
@@ -119,11 +165,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   MaterialPageRoute(builder: (context) => RegisterScreen()),
                 );
               },
-              child: Text("Crear una cuenta"),
+              child: Text(
+                "Crear una cuenta",
+                style: TextStyle(
+                  color: Colors.blueAccent,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
         ),
       ),
+      backgroundColor: Colors.black,
     );
   }
 }

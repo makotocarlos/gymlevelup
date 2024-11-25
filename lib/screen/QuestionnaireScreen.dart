@@ -78,7 +78,10 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Cuestionario')),
+      appBar: AppBar(
+        title: Text('Cuestionario'),
+        backgroundColor: Colors.black87,
+      ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : Padding(
@@ -88,8 +91,26 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      'Cuestionario de Registro',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 24),
                     TextFormField(
-                      decoration: InputDecoration(labelText: 'Nombre de usuario'),
+                      decoration: InputDecoration(
+                        labelText: 'Nombre de usuario',
+                        labelStyle: TextStyle(color: Colors.grey),
+                        filled: true,
+                        fillColor: Colors.black45,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Por favor, ingresa un nombre de usuario.';
@@ -102,10 +123,20 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                       onSaved: (value) {
                         _username = value!;
                       },
+                      style: TextStyle(color: Colors.white),
                     ),
                     SizedBox(height: 20),
                     TextFormField(
-                      decoration: InputDecoration(labelText: 'Peso (kg)'),
+                      decoration: InputDecoration(
+                        labelText: 'Peso (kg)',
+                        labelStyle: TextStyle(color: Colors.grey),
+                        filled: true,
+                        fillColor: Colors.black45,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -119,14 +150,18 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                       onSaved: (value) {
                         _weight = double.tryParse(value!);
                       },
+                      style: TextStyle(color: Colors.white),
                     ),
                     SizedBox(height: 20),
-                    Text('Experiencia con ejercicio:'),
+                    Text(
+                      'Experiencia con ejercicio:',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     DropdownButtonFormField<String>(
                       items: _experienceOptions.map((option) {
                         return DropdownMenuItem<String>(
                           value: option,
-                          child: Text(option),
+                          child: Text(option, style: TextStyle(color: Colors.white)),
                         );
                       }).toList(),
                       onChanged: (value) {
@@ -141,15 +176,21 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Selecciona una opción',
+                        labelStyle: TextStyle(color: Colors.grey),
+                        filled: true,
+                        fillColor: Colors.black45,
                       ),
                     ),
                     SizedBox(height: 20),
-                    Text('Objetivos principales:'),
+                    Text(
+                      'Objetivos principales:',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     DropdownButtonFormField<String>(
                       items: _goalOptions.map((option) {
                         return DropdownMenuItem<String>(
                           value: option,
-                          child: Text(option),
+                          child: Text(option, style: TextStyle(color: Colors.white)),
                         );
                       }).toList(),
                       onChanged: (value) {
@@ -164,19 +205,33 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Selecciona una opción',
+                        labelStyle: TextStyle(color: Colors.grey),
+                        filled: true,
+                        fillColor: Colors.black45,
                       ),
                     ),
                     SizedBox(height: 20),
                     Center(
                       child: ElevatedButton(
                         onPressed: _saveData,
-                        child: Text('Finalizar y Guardar'),
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(vertical: 14, horizontal: 32),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          backgroundColor: Colors.blueAccent, // Color personalizado
+                        ),
+                        child: Text(
+                          'Finalizar y Guardar',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
             ),
+      backgroundColor: Colors.black,
     );
   }
 }

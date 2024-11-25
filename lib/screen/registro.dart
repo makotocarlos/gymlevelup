@@ -39,38 +39,87 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Registro")),
+      appBar: AppBar(
+        title: Text("Registro"),
+        backgroundColor: Colors.black87,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(
+              "Crear una cuenta",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(height: 24),
             TextField(
               controller: emailController,
-              decoration: InputDecoration(labelText: "Correo"),
-            ),
-            TextField(
-              controller: passwordController,
-              decoration: InputDecoration(labelText: "Contraseña"),
-              obscureText: true,
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                labelText: "Correo",
+                labelStyle: TextStyle(color: Colors.grey),
+                filled: true,
+                fillColor: Colors.black45,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                ),
+              ),
             ),
             SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _isLoading
-                  ? null // Deshabilitar el botón mientras se carga
-                  : () => registerUser(context),
-              child: _isLoading
-                  ? CircularProgressIndicator() // Mostrar indicador de carga
-                  : Text("Registrarse"),
+            TextField(
+              controller: passwordController,
+              obscureText: true,
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                labelText: "Contraseña",
+                labelStyle: TextStyle(color: Colors.grey),
+                filled: true,
+                fillColor: Colors.black45,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                ),
+              ),
             ),
+            SizedBox(height: 32),
+            _isLoading
+                ? CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(Colors.blueAccent),
+                  )
+                : ElevatedButton(
+                    onPressed: _isLoading
+                        ? null // Deshabilitar el botón mientras se carga
+                        : () => registerUser(context),
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 14, horizontal: 32),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      backgroundColor: Colors.blueAccent, // Color personalizado
+                    ),
+                    child: Text(
+                      "Registrarse",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ),
             if (_isLoading)
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text("Creando cuenta...", style: TextStyle(color: Colors.blue)),
+                child: Text(
+                  "Creando cuenta...",
+                  style: TextStyle(color: Colors.blueAccent),
+                ),
               ),
           ],
         ),
       ),
+      backgroundColor: Colors.black,
     );
   }
 }

@@ -1,53 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gymlevelup/screenhome/RoutineScreen.dart';
 import 'package:gymlevelup/screen/login.dart';
+import 'package:gymlevelup/screenhome/HistoryScreen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   final String userId;
 
   const HomeScreen({Key? key, required this.userId}) : super(key: key);
 
-  Future<Map<String, dynamic>> _fetchUserData() async {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String username = 'Usuario';
+  int level = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+  }
+
+  Future<void> _fetchUserData() async {
     try {
       DocumentSnapshot<Map<String, dynamic>> userDoc = await FirebaseFirestore.instance
           .collection('users')
-          .doc(userId)
+          .doc(widget.userId)
           .collection('questionnaires')
           .doc('user_info')
           .get();
 
       Map<String, dynamic> userData = userDoc.data() ?? {};
-      String experience = userData['exercise_experience'] ?? 'principiante';
-      int initialLevel;
-
-      switch (experience) {
-        case 'intermedia':
-          initialLevel = 15;
-          break;
-        case 'avanzada':
-          initialLevel = 20;
-          break;
-        default: // 'principiante' o valor por defecto
-          initialLevel = 1;
-      }
-
-      // Verificar si el nivel ya fue asignado previamente
-      int currentLevel = userData['level'] ?? initialLevel;
-
-      // Si no se ha guardado el nivel, guardarlo en Firestore
-      if (userData['level'] == null) {
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userId)
-            .collection('questionnaires')
-            .doc('user_info')
-            .set({'level': currentLevel}, SetOptions(merge: true));
-      }
-
-      return {'username': userData['username'] ?? 'Usuario', 'level': currentLevel};
+      setState(() {
+        username = userData['username'] ?? 'Usuario';
+        level = userData['level'] ?? 1;
+      });
     } catch (e) {
-      return {'username': 'Error', 'level': 0};
+      setState(() {
+        username = 'Error';
+        level = 0;
+      });
     }
   }
 
@@ -58,41 +53,113 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  Future<void> _fetchmainGoals() async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.userId)
+          .collection('questionnaires')
+          .doc('user_info')
+          .get();
+
+      Map<String, dynamic> userData = userDoc.data() ?? {};
+      String mainGoals = userData['mainGoals'] ?? 'No definida';
+
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RoutineScreen(userId: widget.userId, mainGoals: mainGoals),
+        ),
+      );
+
+      if (result != null) {
+        _fetchUserData();
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al obtener la meta principal')),
+      );
+    }
+  }
+
+  void _goToHistoryScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HistoryScreen(userId: widget.userId),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Inicio'),
+        backgroundColor: Colors.black,
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () => _logout(context),
+            color: Colors.white,
           ),
         ],
       ),
-      body: FutureBuilder<Map<String, dynamic>>(
-        future: _fetchUserData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.hasError || snapshot.data == null) {
-            return Center(child: Text('Error al cargar el usuario.'));
-          }
-
-          final userData = snapshot.data!;
-          final username = userData['username'];
-          final level = userData['level'];
-
-          return Center(
-            child: Text(
-              'Bienvenido, $username\nSu nivel actual es $level',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-          );
-        },
+      backgroundColor: Color(0xFF121212), // Fondo oscuro elegante
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Bienvenido, $username',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Nivel actual: $level',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.grey[400],
+                ),
+              ),
+              SizedBox(height: 40),
+              ElevatedButton(
+                onPressed: _fetchmainGoals,
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                child: Text(
+                  'Empezar rutina',
+                  style: TextStyle(fontSize: 18, color: const Color.fromARGB(255, 0, 0, 0)),
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _goToHistoryScreen,
+                style: ElevatedButton.styleFrom(
+                  side: BorderSide(color: Colors.white),
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                child: Text(
+                  'Ver historial',
+                  style: TextStyle(fontSize: 18, color: const Color.fromARGB(255, 0, 0, 0)),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
